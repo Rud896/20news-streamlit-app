@@ -5,7 +5,8 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import RegexpTokenizer
+
 import re
 import numpy as np
 
@@ -14,7 +15,7 @@ nltk.download('punkt')
 nltk.download('stopwords')
 
 # Load model and tokenizer
-model = load_model("model.h5")
+model = load_model("newsgroup_model.h5")
 
 with open("tokenizer.pkl", "rb") as handle:
     tokenizer = pickle.load(handle)
@@ -29,19 +30,20 @@ categories = [
 ]
 
 # Preprocessing function
-stop_words = set(stopwords.words("english"))
-stemmer = PorterStemmer()
-
-def preprocess(text):
+def processing(text):
     text = text.lower()
     text = re.sub(r'\S*@\S*\s?', '', text)
     text = re.sub(r'http\S+', '', text)
     text = re.sub(r'\W', ' ', text)
     text = re.sub(r'\d', ' ', text)
     text = re.sub(r'\s\s+', ' ', text)
-    tokens = word_tokenize(text)
-    stemmed = [stemmer.stem(word) for word in tokens if word not in stop_words]
-    return " ".join(stemmed)
+    
+    tokenizer = RegexpTokenizer(r'\w+')
+    tokens = tokenizer.tokenize(text)
+
+    text2 = [stemmer.stem(word) for word in tokens if word not in stop_words]
+    return " ".join(text2)
+
 
 # Streamlit UI
 st.title("📰 20 Newsgroups Text Classifier")
