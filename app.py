@@ -28,6 +28,8 @@ categories = [
     "sci.space", "soc.religion.christian", "talk.politics.guns", "talk.politics.mideast",
     "talk.politics.misc", "talk.religion.misc"
 ]
+stop_words = set(stopwords.words('english'))
+stemmer = PorterStemmer()
 
 # Preprocessing function
 def preprocess(text):
