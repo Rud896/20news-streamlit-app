@@ -56,7 +56,7 @@ if st.button("Classify"):
     else:
         clean_text = preprocess(user_input)
         sequence = tokenizer.texts_to_sequences([clean_text])
-        padded = pad_sequences(sequence, maxlen=100)  # match your model's input length
+        padded = pad_sequences(sequence, maxlen=755,padding='post')  # match your model's input length
         prediction = model.predict(padded)
         predicted_label = np.argmax(prediction)
         st.success(f"Predicted Category: **{categories[predicted_label]}**")
