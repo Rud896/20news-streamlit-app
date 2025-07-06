@@ -30,7 +30,7 @@ categories = [
 ]
 
 # Preprocessing function
-def processing(text):
+def preprocess(text):
     text = text.lower()
     text = re.sub(r'\S*@\S*\s?', '', text)
     text = re.sub(r'http\S+', '', text)
@@ -43,7 +43,6 @@ def processing(text):
 
     text2 = [stemmer.stem(word) for word in tokens if word not in stop_words]
     return " ".join(text2)
-
 
 # Streamlit UI
 st.title("📰 20 Newsgroups Text Classifier")
