@@ -43,3 +43,5 @@ if st.button("Classify"):
         confidence = probs[predicted_class]
         st.success(f"Predicted Category: **{categories[predicted_class]}**")
         st.info(f"Model Confidence: {confidence:.2f}")
+        if confidence < 0.6:
+            st.warning("⚠️ The model is not very confident about this prediction. The result might be inaccurate.")
