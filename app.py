@@ -1,26 +1,16 @@
 import streamlit as st
 import pickle
-import nltk
+import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-from nltk.corpus import stopwords
-from nltk.stem import PorterStemmer
-from nltk.tokenize import RegexpTokenizer
 
-import re
-import numpy as np
-
-# Download necessary NLTK data
-nltk.download('punkt')
-nltk.download('stopwords')
-
-# Load model and tokenizer
+# Load the trained model and tokenizer
 model = load_model("newsgroup_model.h5")
 
-with open("tokenizer.pkl", "rb") as handle:
-    tokenizer = pickle.load(handle)
+with open("tokenizer.pkl", "rb") as f:
+    tokenizer = pickle.load(f)
 
-# Category label names (update this as per your training labels)
+# Define category labels (ensure the order matches training)
 categories = [
     "alt.atheism", "comp.graphics", "comp.os.ms-windows.misc", "comp.sys.ibm.pc.hardware",
     "comp.sys.mac.hardware", "comp.windows.x", "misc.forsale", "rec.autos", "rec.motorcycles",
@@ -28,35 +18,27 @@ categories = [
     "sci.space", "soc.religion.christian", "talk.politics.guns", "talk.politics.mideast",
     "talk.politics.misc", "talk.religion.misc"
 ]
-stop_words = set(stopwords.words('english'))
-stemmer = PorterStemmer()
 
-# Preprocessing function
-def preprocess(text):
-    text = text.lower()
-    text = re.sub(r'\S*@\S*\s?', '', text)
-    text = re.sub(r'http\S+', '', text)
-    text = re.sub(r'\W', ' ', text)
-    text = re.sub(r'\d', ' ', text)
-    text = re.sub(r'\s\s+', ' ', text)
-    
-    tokenizer = RegexpTokenizer(r'\w+')
-    tokens = tokenizer.tokenize(text)
-
-    text2 = [stemmer.stem(word) for word in tokens if word not in stop_words]
-    return " ".join(text2)
+# Set the same max length as used in training (adjust if needed)
+MAX_SEQUENCE_LENGTH = 755
 
 # Streamlit UI
 st.title("📰 20 Newsgroups Text Classifier")
-user_input = st.text_area("Enter your news content below:")
+st.markdown("Enter a news article or post, and the model will classify it into one of 20 categories.")
+
+user_input = st.text_area("Enter your news content here:")
 
 if st.button("Classify"):
     if user_input.strip() == "":
         st.warning("Please enter some text.")
     else:
-        clean_text = preprocess(user_input)
-        sequence = tokenizer.texts_to_sequences([clean_text])
-        padded = pad_sequences(sequence, maxlen=755,padding='post')  # match your model's input length
-        prediction = model.predict(padded)
-        predicted_label = np.argmax(prediction)
-        st.success(f"Predicted Category: **{categories[predicted_label]}**")
+        # Preprocess and predict
+        input_sequence = tokenizer.texts_to_sequences([user_input.lower()])
+        input_padded = pad_sequences(input_sequence, maxlen=MAX_SEQUENCE_LENGTH, padding='post')
+
+        prediction = model.predict(input_padded)
+        predicted_class = np.argmax(prediction)
+        confidence = prediction[0][predicted_class]
+
+        st.success(f"Predicted Category: **{categories[predicted_class]}**")
+        st.info(f"Model Confidence: {confidence:.2f}")
