@@ -33,7 +33,7 @@ if st.button("Classify"):
         st.warning("Please enter some text.")
     else:
         # Preprocess and predict
-        input_sequence = tokenizer.texts_to_sequences(user_input)
+        input_sequence = tokenizer.texts_to_sequences([user_input])
         input_padded = pad_sequences(input_sequence, maxlen=MAX_SEQUENCE_LENGTH, padding='post')
 
         prediction = model.predict(input_padded)
