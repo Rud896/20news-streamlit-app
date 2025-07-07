@@ -3,6 +3,7 @@ import pickle
 import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.nn import softmax
 
 # Load the trained model and tokenizer
 model = load_model("newsgroup_model.h5")
@@ -38,7 +39,7 @@ if st.button("Classify"):
 
         prediction = model.predict(input_padded)
         predicted_class = np.argmax(prediction)
-        confidence = prediction[0][predicted_class]
-
+        probs = softmax(prediction[0]).numpy()
+        confidence = probs[predicted_class]
         st.success(f"Predicted Category: **{categories[predicted_class]}**")
         st.info(f"Model Confidence: {confidence:.2f}")
