@@ -6,7 +6,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.nn import softmax
 
 # Load the trained model and tokenizer
-model = load_model("newsgroup_model.h5")
+model = load_model("newsgroup_model.h5",compile=False)
 
 with open("tokenizer.pkl", "rb") as f:
     tokenizer = pickle.load(f)
