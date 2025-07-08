@@ -1,9 +1,9 @@
 # 20news-streamlit-app
-## 🔍 Why I Used BiLSTM Instead of Transformers
+## Why I Used BiLSTM Instead of Transformers
 
 While transformer-based models like BERT or RoBERTa are state-of-the-art in text classification tasks such as 20 Newsgroups, I intentionally chose to build a **BiLSTM (Bidirectional LSTM) model from scratch**. This decision was based on both educational and practical motivations:
 
-### 🎯 Objective: Demonstrate End-to-End Model Building & Optimization
+### Objective: Demonstrate End-to-End Model Building & Optimization
 
 Rather than using pretrained models with millions of parameters, I wanted to showcase my ability to:
 - Handle raw text data and perform robust preprocessing (tokenization, padding, vocabulary creation)
@@ -11,7 +11,7 @@ Rather than using pretrained models with millions of parameters, I wanted to sho
 - Optimize training through techniques like regularization, dropout, learning rate tuning, and evaluation metrics
 - Balance generalization and performance without relying on pretrained contextual embeddings
 
-### 🧠 Why BiLSTM?
+### Why BiLSTM?
 
 BiLSTMs are powerful for sequence modeling and can capture contextual dependencies in both forward and backward directions. They were widely used before transformers, and they still perform competitively when trained properly. BiLSTM allowed me to:
 
@@ -19,7 +19,7 @@ BiLSTMs are powerful for sequence modeling and can capture contextual dependenci
 - Train all parameters **from scratch**, enabling full control over the model
 - Show that with careful tuning, even non-transformer architectures can achieve strong results (e.g., ~87% accuracy on 20 Newsgroups)
 
-### 💡 What I Achieved
+### What I Achieved
 
 - **Accuracy**: 86.7% on the 20-class classification task
 - **Macro F1-score**: 0.865 — balanced performance across all categories
